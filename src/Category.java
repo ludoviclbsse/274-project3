@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -14,7 +15,7 @@ public class Category {
 		try {
 			Scanner read = new Scanner(new File(fileName));
 			do {
-				
+
 				String line = read.nextLine();
 				if (l % 6 == 1)
 					q.setQuestion(line);
@@ -43,9 +44,6 @@ public class Category {
 		this.name = name;
 		questions = new ArrayList<Question>();
 		read(name + ".txt");
-		/*for (int i = 0; i < questions.size(); i++) {
-			System.out.println(questions.get(i).toString());
-		}*/
 	}
 
 	public int getNumber() {
@@ -66,7 +64,7 @@ public class Category {
 	}
 
 	public static String getString() {
-		Scanner in = new Scanner( System.in );
+		Scanner in = new Scanner(System.in);
 		String input = in.nextLine();
 		return input;
 	}
@@ -79,7 +77,7 @@ public class Category {
 			System.out.println(a + ". " + questions.get(i).getQuestion());
 			a++;
 		}
-	
+
 		while (input < 1 || input > questions.size()) {
 			System.out.println("Input must be [1-" + questions.size() + "]");
 			input = getNumber();
@@ -96,28 +94,32 @@ public class Category {
 			System.out.println("Input must be [1-6]");
 			input = getNumber();
 		}
-		
-		/*A REFAIRE*/
-		
+
+
 		switch (input) {
 		case 1:
-			questions.get(index).setQuestion(getString());
+			System.out.println("Enter new question");
+			questions.get(index - 1).setQuestion(getString());
 			break;
 		case 2:
-			questions.get(index).setA1(getString());
+			System.out.println("Enter new answer 1");
+			questions.get(index - 1).setA1(getString());
 			break;
 		case 3:
-			questions.get(index).setA2(getString());
+			System.out.println("Enter new answer 2");
+			questions.get(index - 1).setA2(getString());
 			break;
 		case 4:
-			questions.get(index).setA3(getString());
+			System.out.println("Enter new answer 3");
+			questions.get(index - 1).setA3(getString());
 			break;
 		case 5:
-			questions.get(index).setA4(getString());
+			System.out.println("Enter new answer 4");
+			questions.get(index - 1).setA4(getString());
 			break;
 		default:
-			questions.get(index).setAnswer(getNumber());
-
+			System.out.println("Enter new good answer");
+			questions.get(index - 1).setAnswer(getNumber());
 		}
 	}
 
@@ -142,19 +144,16 @@ public class Category {
 		ArrayList<Question> listq = questions;
 		int points = 0;
 		int input;
-		Random rand = new Random();
-		int q;
+		Collections.shuffle(listq);
+		
 		for (int i = 0; i < 10; i++) {
 			input = -1;
-			q = rand.nextInt(listq.size()) + 0;
-			System.out.println(listq.get(q).toString());
+			System.out.println(questions.get(i).toString());
 			while (input < 1 || input > 4)
 				input = getNumber();
-			if (input == listq.get(q).getAnswer())
+			if (input == questions.get(i).getAnswer())
 				points++;
-			listq.remove(q);
 		}
-
 		return points;
 	}
 
@@ -164,5 +163,10 @@ public class Category {
 
 	public ArrayList<Question> getQuestions() {
 		return this.questions;
+	}
+	
+	public void printQuestions(ArrayList<Question> q) {
+		for (int i = 0; i < q.size(); i++)
+			System.out.println(q.get(i).toString());
 	}
 }

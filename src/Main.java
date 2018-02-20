@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Main {
@@ -7,13 +9,17 @@ public class Main {
 		int a = 1;
 		int input;
 		while (boucle) {
+			input = -1;
 			System.out.println("Choose Category");
 			for (int i = 0; i < categories.size(); i++) {
 				System.out.println(a + ". " + categories.get(i).getName());
 				a++;
 			}
 			System.out.println("4. Quit Program");
-			input = categories.get(0).getNumber();
+			while (input < 1 || input > 4) {
+				System.out.println("Input mus be [1-4]");
+				input = categories.get(0).getNumber();
+			}
 			switch (input) {
 			case 1:
 				menuQuestion(categories.get(0));
@@ -35,9 +41,13 @@ public class Main {
 		int a = 1;
 		int input;
 		while (boucle) {
-			System.out.println(cat.getName() + "\n1. Take Quiz\n2. Add new question\n3. Modify question\n4. Change category");
-			
-			input = cat.getNumber();
+			input = -1;
+			System.out.println(
+					cat.getName() + "\n1. Take Quiz\n2. Add new question\n3. Modify question\n4. Change category");
+			while (input < 1 || input > 4) {
+				System.out.println("Input must be [1-4]");
+				input = cat.getNumber();
+			}
 			switch (input) {
 			case 1:
 				System.out.println("Points: " + cat.takeQuiz());
@@ -49,8 +59,22 @@ public class Main {
 				cat.modifyQuestion();
 				break;
 			default:
+				write(cat.getName(), cat);
 				boucle = false;
 			}
+		}
+	}
+
+	public static void write(String fileName, Category cat) {
+		try {
+			PrintWriter writer = new PrintWriter(fileName + ".txt");
+			for (int i = 0; i < cat.getQuestions().size(); i++) {
+				writer.println(cat.getQuestions().get(i));
+				writer.println(cat.getQuestions().get(i).getAnswer());
+			}
+			writer.close();
+		} catch (FileNotFoundException fnf) {
+			System.out.println("File was not found");
 		}
 	}
 
